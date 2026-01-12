@@ -1,0 +1,23 @@
+Nazwa: Sorting and Scrap Data Management
+Opis: Aplikacja do zarządzania danymi o sortowaniu 100% i brakach wewnętrznych
+Uruchamianie: aplikacja uruchamiana w przeglądarce, serwer lokalny, port: 5000
+
+Funkcje:
+#1 Wprowadzanie wyników sortowania/kontroli 100% - 3 rodzaje formularzy
+#2 Wyświetlanie danych w tabeli z filtrowaniem po wartościach kolumn
+#3 Analiza statystyczna danych
+#4 Pobieranie danych z plików CSV
+#5 Ręczna modyfikacja danych
+
+Struktura bazy danych:
+Tabela: Dane z raportów
+kolumny: id (primary key), nr raportu, kategoria źródła danych, nr operatora, nr niezgodności, selekcja na bieżąco tak/nie (boolean), ilość detali sprawdzonych, ilość braków, zalecana wydajność [sztuk/godz], rzeczywista wydajność [sztuk/godz], czas pracy [godz], uwagi, uwagi do wydajności, data selekcji
+
+Tabela: Operatorzy
+kolumny: id (primary key), nr operatora, imię i nazwisko, nazwa stanowiska
+Tabela: koszty pracy
+kolumny: id (primary key), dział, koszt roboczo-godziny [PLN]
+
+Tabela: kategorie źródła danych
+kolumny: id (p-k), opis kategorii
+

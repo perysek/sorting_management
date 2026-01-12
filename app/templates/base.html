@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pl" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Scrap Data Management{% endblock %}</title>
+    <meta name="description" content="System zarządzania danymi sortowania i braków">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        },
+                        accent: {
+                            400: '#34d399',
+                            500: '#10b981',
+                            600: '#059669',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        
+        /* Smooth transitions */
+        * {
+            transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 150ms;
+        }
+        
+        /* Table hover effect */
+        .table-row-hover:hover {
+            background-color: #f8fafc;
+        }
+        
+        /* Input focus ring */
+        .input-focus:focus {
+            outline: none;
+            ring: 2px;
+            ring-color: #3b82f6;
+            border-color: #3b82f6;
+        }
+    </style>
+    
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="h-full bg-gradient-to-br from-slate-50 to-slate-100 font-sans antialiased">
+    <div class="flex h-full">
+        <!-- Sidebar -->
+        {% include 'components/sidebar.html' %}
+        
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col min-h-screen overflow-hidden">
+            <!-- Top Header -->
+            <header class="bg-white/80 backdrop-blur-sm border-b border-slate-200 px-6 py-4 flex items-center justify-between">
+                <div>
+                    <h1 class="text-xl font-semibold text-slate-800">{% block page_title %}Dashboard{% endblock %}</h1>
+                    <p class="text-sm text-slate-500">{% block page_subtitle %}{% endblock %}</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span class="text-sm text-slate-500">{{ now().strftime('%Y-%m-%d %H:%M') if now is defined else '' }}</span>
+                </div>
+            </header>
+            
+            <!-- Flash Messages -->
+            {% include 'components/flash_messages.html' %}
+            
+            <!-- Page Content -->
+            <main class="flex-1 overflow-auto p-6">
+                {% block content %}{% endblock %}
+            </main>
+            
+            <!-- Footer -->
+            <footer class="bg-white/50 border-t border-slate-200 px-6 py-3 text-center text-sm text-slate-500">
+                Sorting and Scrap Data Management &copy; 2026
+            </footer>
+        </div>
+    </div>
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html>

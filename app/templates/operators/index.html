@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}Operatorzy - Scrap Data Management{% endblock %}
+
+{% block page_title %}Zarządzaj Operatorami{% endblock %}
+{% block page_subtitle %}Dodawaj i przeglądaj operatorów{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl space-y-6">
+    <!-- Add Operator Card -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white">
+            <h2 class="text-lg font-semibold text-slate-800">Dodaj nowego operatora</h2>
+        </div>
+        <form method="POST" action="{{ url_for('operators.add') }}" class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <label for="nr_operatora" class="block text-sm font-medium text-slate-700 mb-1">Numer operatora <span class="text-red-500">*</span></label>
+                    <input type="number" name="nr_operatora" id="nr_operatora" required min="1"
+                           class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-shadow"
+                           placeholder="np. 101">
+                </div>
+                <div class="md:col-span-2">
+                    <label for="imie_nazwisko" class="block text-sm font-medium text-slate-700 mb-1">Imię i nazwisko <span class="text-red-500">*</span></label>
+                    <input type="text" name="imie_nazwisko" id="imie_nazwisko" required
+                           class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-shadow"
+                           placeholder="np. Jan Kowalski">
+                </div>
+                <div>
+                    <label for="dzial_id" class="block text-sm font-medium text-slate-700 mb-1">Dział <span class="text-red-500">*</span></label>
+                    <select name="dzial_id" id="dzial_id" required
+                            class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-shadow bg-white">
+                        <option value="">Wybierz...</option>
+                        {% for cat in categories %}
+                        <option value="{{ cat.id }}">{{ cat.opis_kategorii }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="mt-4">
+                <button type="submit"
+                        class="px-5 py-2.5 bg-gradient-to-r from-primary-500 to-primary-600 text-white font-medium rounded-xl hover:from-primary-600 hover:to-primary-700 shadow-sm hover:shadow transition-all flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Dodaj Operatora
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Operators List Card -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white flex items-center justify-between">
+            <h2 class="text-lg font-semibold text-slate-800">Istniejący operatorzy</h2>
+            <span class="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-sm font-medium">{{ operators|length }} operatorów</span>
+        </div>
+        
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead>
+                    <tr class="bg-slate-50 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                        <th class="px-6 py-3">ID</th>
+                        <th class="px-6 py-3">Numer</th>
+                        <th class="px-6 py-3">Imię i Nazwisko</th>
+                        <th class="px-6 py-3">Dział</th>
+                        <th class="px-6 py-3 text-center">Akcje</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    {% for op in operators %}
+                    <tr class="table-row-hover">
+                        <td class="px-6 py-4 text-sm text-slate-500">{{ op.id }}</td>
+                        <td class="px-6 py-4">
+                            <span class="px-3 py-1 bg-primary-100 text-primary-700 rounded-lg text-sm font-medium">{{ op.nr_operatora }}</span>
+                        </td>
+                        <td class="px-6 py-4 text-sm font-medium text-slate-800">{{ op.imie_nazwisko }}</td>
+                        <td class="px-6 py-4 text-sm text-slate-600">{{ op.dzial.opis_kategorii if op.dzial else 'Brak' }}</td>
+                        <td class="px-6 py-4 text-center">
+                            <form action="{{ url_for('operators.delete', operator_id=op.id) }}" method="POST" class="inline"
+                                  onsubmit="return confirm('Czy na pewno chcesz usunąć tego operatora?');">
+                                <button type="submit" 
+                                        class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                        title="Usuń">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                    </svg>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="px-6 py-12 text-center text-slate-500">
+                            <svg class="w-12 h-12 mx-auto mb-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                            </svg>
+                            <p class="text-lg font-medium">Brak operatorów</p>
+                            <p class="text-sm">Dodaj pierwszego operatora używając formularza powyżej.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

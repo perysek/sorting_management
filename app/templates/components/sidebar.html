@@ -1,0 +1,83 @@
+<aside class="w-64 bg-gradient-to-b from-slate-800 via-slate-850 to-slate-900 text-white flex flex-col shadow-xl">
+    <!-- Logo -->
+    <div class="p-5 border-b border-slate-700/50">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-600 rounded-xl flex items-center justify-center shadow-lg">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+            </div>
+            <div>
+                <h1 class="font-bold text-lg leading-tight">Scrap Data</h1>
+                <p class="text-xs text-slate-400">Management System</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Navigation -->
+    <nav class="flex-1 p-4 space-y-1">
+        <a href="{{ url_for('main.index') }}" 
+           class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium
+                  {% if request.endpoint == 'main.index' %}
+                  bg-gradient-to-r from-primary-500/20 to-primary-600/10 text-primary-400 border border-primary-500/30
+                  {% else %}
+                  text-slate-300 hover:bg-slate-700/50 hover:text-white
+                  {% endif %}">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+            </svg>
+            Dashboard
+        </a>
+        
+        <a href="{{ url_for('reports.create') }}" 
+           class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium
+                  {% if request.endpoint == 'reports.create' %}
+                  bg-gradient-to-r from-primary-500/20 to-primary-600/10 text-primary-400 border border-primary-500/30
+                  {% else %}
+                  text-slate-300 hover:bg-slate-700/50 hover:text-white
+                  {% endif %}">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            Dodaj Raport
+        </a>
+        
+        <div class="pt-4 pb-2">
+            <p class="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Zarządzanie</p>
+        </div>
+        
+        <a href="{{ url_for('operators.index') }}" 
+           class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium
+                  {% if request.endpoint and 'operators' in request.endpoint %}
+                  bg-gradient-to-r from-primary-500/20 to-primary-600/10 text-primary-400 border border-primary-500/30
+                  {% else %}
+                  text-slate-300 hover:bg-slate-700/50 hover:text-white
+                  {% endif %}">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
+            Operatorzy
+        </a>
+        
+        <a href="{{ url_for('categories.index') }}" 
+           class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium
+                  {% if request.endpoint and 'categories' in request.endpoint %}
+                  bg-gradient-to-r from-primary-500/20 to-primary-600/10 text-primary-400 border border-primary-500/30
+                  {% else %}
+                  text-slate-300 hover:bg-slate-700/50 hover:text-white
+                  {% endif %}">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z"></path>
+            </svg>
+            Kategorie
+        </a>
+    </nav>
+    
+    <!-- Bottom Section -->
+    <div class="p-4 border-t border-slate-700/50">
+        <div class="px-4 py-3 rounded-xl bg-slate-700/30 text-center">
+            <p class="text-xs text-slate-400">Wersja 2.0</p>
+            <p class="text-xs text-slate-500">Flask + Tailwind</p>
+        </div>
+    </div>
+</aside>
