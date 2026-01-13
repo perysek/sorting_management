@@ -7,6 +7,7 @@ class KategoriaZrodlaDanych(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     opis_kategorii = db.Column(db.String, unique=True)
+    koszt_pracy = db.Column(db.Float, nullable=True)
 
     def __repr__(self):
         return f'<Kategoria {self.opis_kategorii}>'
@@ -35,6 +36,10 @@ class DaneRaportu(db.Model):
     operator_id = db.Column(db.Integer, db.ForeignKey('operatorzy.id'))
     operator = db.relationship("Operator")
     nr_niezgodnosci = db.Column(db.String)
+    # MOSYS cached data columns
+    data_niezgodnosci = db.Column(db.Date, nullable=True)
+    nr_zamowienia = db.Column(db.String, nullable=True)
+    kod_detalu = db.Column(db.String, nullable=True)
     nr_instrukcji = db.Column(db.String)
     selekcja_na_biezaco = db.Column(db.Boolean, default=False)
     ilosc_detali_sprawdzonych = db.Column(db.Integer)

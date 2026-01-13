@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}Edytuj operatora - Scrap Data Management{% endblock %}
+
+{% block page_title %}Edycja operatora{% endblock %}
+{% block page_subtitle %}Modyfikuj dane operatora{% endblock %}
+
+{% block content %}
+<form method="POST" action="{{ url_for('operators.edit', operator_id=operator.id) }}" class="max-w-2xl">
+    <!-- Operator Info Card -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white">
+            <h2 class="text-lg font-semibold text-slate-800">Dane operatora</h2>
+        </div>
+        <div class="p-6 space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="nr_operatora" class="block text-sm font-medium text-slate-700 mb-1">
+                        Numer operatora <span class="text-red-500">*</span>
+                    </label>
+                    <input type="number" name="nr_operatora" id="nr_operatora" required min="1"
+                           value="{{ operator.nr_operatora or '' }}"
+                           class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-shadow"
+                           placeholder="np. 101">
+                </div>
+                <div>
+                    <label for="dzial_id" class="block text-sm font-medium text-slate-700 mb-1">
+                        Dział <span class="text-red-500">*</span>
+                    </label>
+                    <select name="dzial_id" id="dzial_id" required
+                            class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-shadow bg-white">
+                        <option value="">Wybierz dział...</option>
+                        {% for cat in categories %}
+                        <option value="{{ cat.id }}" {{ 'selected' if operator.dzial_id == cat.id else '' }}>
+                            {{ cat.opis_kategorii }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            
+            <div>
+                <label for="imie_nazwisko" class="block text-sm font-medium text-slate-700 mb-1">
+                    Imię i nazwisko <span class="text-red-500">*</span>
+                </label>
+                <input type="text" name="imie_nazwisko" id="imie_nazwisko" required
+                       value="{{ operator.imie_nazwisko or '' }}"
+                       class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-shadow"
+                       placeholder="np. Jan Kowalski">
+            </div>
+        </div>
+    </div>
+    
+    <!-- Actions -->
+    <div class="flex items-center gap-4 mt-6">
+        <button type="submit"
+                class="px-6 py-3 bg-gradient-to-r from-primary-500 to-primary-600 text-white font-semibold rounded-xl hover:from-primary-600 hover:to-primary-700 shadow-md hover:shadow-lg transition-all flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            Zapisz Zmiany
+        </button>
+        <a href="{{ url_for('operators.index') }}"
+           class="px-6 py-3 bg-white border border-slate-300 text-slate-700 font-medium rounded-xl hover:bg-slate-50 transition-colors">
+            Anuluj
+        </a>
+    </div>
+</form>
+{% endblock %}

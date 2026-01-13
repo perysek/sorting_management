@@ -1,0 +1,100 @@
+<!-- Confirmation Modal Component -->
+<div id="confirmModal" class="fixed inset-0 z-50 hidden">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeConfirmModal()"></div>
+    
+    <!-- Modal -->
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+        <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full transform transition-all"
+             onclick="event.stopPropagation()">
+            <!-- Header -->
+            <div class="px-6 pt-6 pb-4">
+                <div class="flex items-center gap-4">
+                    <div id="modalIcon" class="w-12 h-12 rounded-xl flex items-center justify-center bg-red-100">
+                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 id="modalTitle" class="text-lg font-semibold text-slate-800">Potwierdzenie</h3>
+                        <p id="modalMessage" class="text-sm text-slate-500">Czy na pewno chcesz wykonać tę akcję?</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Actions -->
+            <div class="px-6 pb-6 pt-2 flex items-center justify-end gap-3">
+                <button type="button" onclick="closeConfirmModal()"
+                        class="px-5 py-2.5 text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors">
+                    Anuluj
+                </button>
+                <button type="button" id="modalConfirmBtn"
+                        class="px-5 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 rounded-xl shadow-sm transition-all">
+                    Usuń
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let pendingForm = null;
+    
+    function showConfirmModal(form, title, message, confirmText) {
+        pendingForm = form;
+        
+        document.getElementById('modalTitle').textContent = title || 'Potwierdzenie';
+        document.getElementById('modalMessage').textContent = message || 'Czy na pewno chcesz wykonać tę akcję?';
+        document.getElementById('modalConfirmBtn').textContent = confirmText || 'Potwierdź';
+        
+        const modal = document.getElementById('confirmModal');
+        modal.classList.remove('hidden');
+        
+        // Add animation
+        requestAnimationFrame(() => {
+            modal.querySelector('.bg-white').classList.add('scale-100', 'opacity-100');
+        });
+        
+        // Focus confirm button
+        document.getElementById('modalConfirmBtn').focus();
+    }
+    
+    function closeConfirmModal() {
+        const modal = document.getElementById('confirmModal');
+        modal.classList.add('hidden');
+        pendingForm = null;
+    }
+    
+    function confirmModalAction() {
+        if (pendingForm) {
+            pendingForm.submit();
+        }
+        closeConfirmModal();
+    }
+    
+    // Set up confirm button click handler
+    document.addEventListener('DOMContentLoaded', function() {
+        const confirmBtn = document.getElementById('modalConfirmBtn');
+        if (confirmBtn) {
+            confirmBtn.onclick = confirmModalAction;
+        }
+    });
+    
+    // Close modal on Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeConfirmModal();
+        }
+    });
+    
+    // Helper function to show delete confirmation
+    function confirmDelete(form, itemName) {
+        showConfirmModal(
+            form,
+            'Potwierdź usunięcie',
+            `Czy na pewno chcesz usunąć "${itemName}"? Ta operacja jest nieodwracalna.`,
+            'Usuń'
+        );
+        return false; // Prevent form submission
+    }
+</script>

@@ -6,6 +6,13 @@ from app.models import DaneRaportu, BrakiDefektyRaportu, Operator
 bp = Blueprint('reports', __name__)
 
 
+@bp.route('/<int:report_id>')
+def view(report_id):
+    """View single report details."""
+    report = DaneRaportu.query.get_or_404(report_id)
+    return render_template('reports/view.html', report=report)
+
+
 @bp.route('/create', methods=['GET', 'POST'])
 def create():
     """Create new report form."""

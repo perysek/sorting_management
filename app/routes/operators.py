@@ -41,6 +41,36 @@ def add():
     return redirect(url_for('operators.index'))
 
 
+@bp.route('/<int:operator_id>/edit', methods=['GET', 'POST'])
+def edit(operator_id):
+    """Edit an operator."""
+    operator = Operator.query.get_or_404(operator_id)
+    categories = KategoriaZrodlaDanych.query.all()
+    
+    if request.method == 'POST':
+        try:
+            nr_operatora = request.form.get('nr_operatora')
+            imie_nazwisko = request.form.get('imie_nazwisko')
+            dzial_id = request.form.get('dzial_id')
+
+            if not all([nr_operatora, imie_nazwisko, dzial_id]):
+                flash('Numer, Imię i Nazwisko oraz Dział są wymagane.', 'error')
+                return render_template('operators/edit.html', operator=operator, categories=categories)
+
+            operator.nr_operatora = int(nr_operatora)
+            operator.imie_nazwisko = imie_nazwisko
+            operator.dzial_id = int(dzial_id)
+            db.session.commit()
+            flash('Operator zaktualizowany pomyślnie!', 'success')
+            return redirect(url_for('operators.index'))
+
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Błąd: {str(e)}', 'error')
+    
+    return render_template('operators/edit.html', operator=operator, categories=categories)
+
+
 @bp.route('/<int:operator_id>/delete', methods=['POST'])
 def delete(operator_id):
     """Delete an operator."""

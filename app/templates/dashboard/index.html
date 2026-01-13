@@ -6,85 +6,151 @@
 {% block page_subtitle %}Przegląd danych z raportów selekcji{% endblock %}
 
 {% block content %}
-<div class="space-y-6">
+<div class="space-y-2">
     <!-- Stats Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 hover:shadow-md transition-shadow">
-            <div class="flex items-center gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-6 gap-1">
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-2 hover:shadow-md transition-shadow">
+            <div class="flex items-center gap-1">
                 <div class="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-600 rounded-xl flex items-center justify-center">
                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                     </svg>
                 </div>
                 <div>
-                    <p class="text-2xl font-bold text-slate-800">{{ reports|length }}</p>
-                    <p class="text-sm text-slate-500">Wszystkich raportów</p>
+                    <p class="text-xl font-bold text-slate-800">{{ stats.count }}</p>
+                    <p class="text-xs text-slate-500">Raportów (filtr)</p>
                 </div>
             </div>
         </div>
         
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 hover:shadow-md transition-shadow">
-            <div class="flex items-center gap-4">
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-2 hover:shadow-md transition-shadow">
+            <div class="flex items-center gap-1">
                 <div class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center">
                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                 </div>
                 <div>
-                    <p class="text-2xl font-bold text-slate-800">{{ reports|sum(attribute='ilosc_detali_sprawdzonych') }}</p>
-                    <p class="text-sm text-slate-500">Detali sprawdzonych</p>
+                    <p class="text-xl font-bold text-slate-800">{{ "{:,.0f}".format(stats.parts_checked).replace(',', ' ') }}</p>
+                    <p class="text-xs text-slate-500">Detali sprawdzonych</p>
                 </div>
             </div>
         </div>
         
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 hover:shadow-md transition-shadow">
-            <div class="flex items-center gap-4">
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-2 hover:shadow-md transition-shadow">
+            <div class="flex items-center gap-1">
                 <div class="w-12 h-12 bg-gradient-to-br from-amber-500 to-orange-500 rounded-xl flex items-center justify-center">
                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
                     </svg>
                 </div>
                 <div>
-                    <p class="text-2xl font-bold text-slate-800">{{ reports|sum(attribute='total_defects') }}</p>
-                    <p class="text-sm text-slate-500">Suma braków</p>
+                    <p class="text-xl font-bold text-slate-800">{{ "{:,.0f}".format(stats.total_defects).replace(',', ' ') }}</p>
+                    <p class="text-xs text-slate-500">Suma braków</p>
                 </div>
             </div>
         </div>
         
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 hover:shadow-md transition-shadow">
-            <div class="flex items-center gap-4">
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-2 hover:shadow-md transition-shadow">
+            <div class="flex items-center gap-1">
+                <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path>
+                    </svg>
+                </div>
+                <div>
+                    <p class="text-xl font-bold text-slate-800">{{ "%.2f"|format(stats.average_scrap_rate) }}%</p>
+                    <p class="text-xs text-slate-500">Śr. brakowość</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-2 hover:shadow-md transition-shadow">
+            <div class="flex items-center gap-1">
+                <div class="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                    </svg>
+                </div>
+                <div>
+                    <p class="text-xl font-bold text-slate-800">{{ "%.0f"|format(stats.average_productivity) }}</p>
+                    <p class="text-xs text-slate-500">Śr. wydajność [szt/h]</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-2 hover:shadow-md transition-shadow">
+            <div class="flex items-center gap-1">
                 <div class="w-12 h-12 bg-gradient-to-br from-violet-500 to-purple-600 rounded-xl flex items-center justify-center">
                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                 </div>
                 <div>
-                    <p class="text-2xl font-bold text-slate-800">{{ "%.1f"|format(reports|sum(attribute='czas_pracy')) }}</p>
-                    <p class="text-sm text-slate-500">Godzin pracy</p>
+                    <p class="text-xl font-bold text-slate-800">{{ "%.1f"|format(stats.hours_worked) }}</p>
+                    <p class="text-xs text-slate-500">Godzin pracy</p>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Date Filter Bar -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-2">
+        <div class="flex flex-wrap items-center gap-2">
+            <span class="text-sm font-medium text-slate-600">Zakres dat:</span>
+            <div class="flex flex-wrap gap-2">
+                <a href="{{ url_for('main.index', preset='last_week') }}" 
+                   class="px-3 py-1.5 text-sm rounded-lg transition-colors {{ 'bg-primary-500 text-white' if preset == 'last_week' else 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">
+                    Ostatni tydzień
+                </a>
+                <a href="{{ url_for('main.index', preset='last_month') }}" 
+                   class="px-3 py-1.5 text-sm rounded-lg transition-colors {{ 'bg-primary-500 text-white' if preset == 'last_month' else 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">
+                    Ostatni miesiąc
+                </a>
+                <a href="{{ url_for('main.index', preset='this_month') }}" 
+                   class="px-3 py-1.5 text-sm rounded-lg transition-colors {{ 'bg-primary-500 text-white' if preset == 'this_month' else 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">
+                    Ten miesiąc
+                </a>
+                <a href="{{ url_for('main.index', preset='previous_month') }}" 
+                   class="px-3 py-1.5 text-sm rounded-lg transition-colors {{ 'bg-primary-500 text-white' if preset == 'previous_month' else 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">
+                    Poprzedni miesiąc
+                </a>
+                <a href="{{ url_for('main.index', preset='last_quarter') }}" 
+                   class="px-3 py-1.5 text-sm rounded-lg transition-colors {{ 'bg-primary-500 text-white' if preset == 'last_quarter' else 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">
+                    Ostatni kwartał
+                </a>
+                <a href="{{ url_for('main.index', preset='this_year') }}" 
+                   class="px-3 py-1.5 text-sm rounded-lg transition-colors {{ 'bg-primary-500 text-white' if preset == 'this_year' else 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">
+                    Ten rok
+                </a>
+                <a href="{{ url_for('main.index', preset='previous_year') }}" 
+                   class="px-3 py-1.5 text-sm rounded-lg transition-colors {{ 'bg-primary-500 text-white' if preset == 'previous_year' else 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">
+                    Poprzedni rok
+                </a>
+                <a href="{{ url_for('main.index', preset='last_year') }}" 
+                   class="px-3 py-1.5 text-sm rounded-lg transition-colors {{ 'bg-primary-500 text-white' if preset == 'last_year' else 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">
+                    Ostatni rok
+                </a>
+                <a href="{{ url_for('main.index', preset='all') }}" 
+                   class="px-3 py-1.5 text-sm rounded-lg transition-colors {{ 'bg-primary-500 text-white' if preset == 'all' else 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">
+                    Wszystko
+                </a>
+            </div>
+            <div class="h-6 w-px bg-slate-200 mx-2 hidden md:block"></div>
+            <span class="text-sm text-slate-500">
+                Wyświetlanych: <strong>{{ reports|length }}</strong> z <strong>{{ stats.count }}</strong> raportów
+            </span>
+        </div>
+    </div>
+
     <!-- Reports Table -->
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-        <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
-            <h2 class="text-lg font-semibold text-slate-800">Dane z raportów</h2>
-            <a href="{{ url_for('reports.create') }}" 
-               class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary-500 to-primary-600 text-white text-sm font-medium rounded-xl hover:from-primary-600 hover:to-primary-700 shadow-sm hover:shadow transition-all">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                </svg>
-                Nowy Raport
-            </a>
-        </div>
-        
         <div class="overflow-x-auto">
             <table class="w-full">
                 <thead>
                     <tr class="bg-slate-50 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-                        <th class="px-4 py-3">
-                            <a href="{{ url_for('main.index', sort='data_selekcji', order='asc' if sort_by == 'data_selekcji' and order == 'desc' else 'desc') }}" 
+                        <th class="px-2 py-2 align-top">
+                            <a href="{{ url_for('main.index', sort='data_selekcji', order='asc' if sort_by == 'data_selekcji' and order == 'desc' else 'desc', preset=preset) }}" 
                                class="flex items-center gap-1 hover:text-primary-600">
                                 Data
                                 {% if sort_by == 'data_selekcji' %}
@@ -94,72 +160,133 @@
                                 {% endif %}
                             </a>
                         </th>
-                        <th class="px-4 py-3">Operator</th>
-                        <th class="px-4 py-3">Nr Raportu</th>
-                        <th class="px-4 py-3">Nr Niezgodności</th>
-                        <th class="px-4 py-3">Nr Instrukcji</th>
-                        <th class="px-4 py-3 text-center">Na bieżąco</th>
-                        <th class="px-4 py-3 text-right">Sprawdzonych</th>
-                        <th class="px-4 py-3 text-right">Braków</th>
-                        <th class="px-4 py-3 text-right">Czas (h)</th>
-                        <th class="px-4 py-3 text-right">Wydajność</th>
-                        <th class="px-4 py-3 text-right">Efektywność</th>
-                        <th class="px-4 py-3 text-center">Akcje</th>
+                        <th class="px-2 py-2 align-top">Operator</th>
+                        <th class="px-2 py-2 align-top">
+                            <div class="flex flex-col gap-1">
+                                <a href="{{ url_for('main.index', sort='nr_raportu', order='asc' if sort_by == 'nr_raportu' and order == 'desc' else 'desc', preset=preset, filter_nr_raportu=filters.nr_raportu, filter_nr_niezgodnosci=filters.nr_niezgodnosci) }}" 
+                                   class="flex items-center gap-1 hover:text-primary-600">
+                                    Raport
+                                    {% if sort_by == 'nr_raportu' %}
+                                    <svg class="w-4 h-4 {{ 'rotate-180' if order == 'asc' else '' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                    {% endif %}
+                                </a>
+                                <input type="text" id="search_nr_raportu" placeholder="Szukaj..." 
+                                       value="{{ filters.nr_raportu }}" 
+                                       class="w-full px-2 py-0.5 text-xs font-normal normal-case rounded border border-slate-300 focus:ring-1 focus:ring-primary-500 focus:border-primary-500">
+                            </div>
+                        </th>
+                        <th class="px-2 py-2 align-top">
+                            <div class="flex flex-col gap-1">
+                                <a href="{{ url_for('main.index', sort='nr_niezgodnosci', order='asc' if sort_by == 'nr_niezgodnosci' and order == 'desc' else 'desc', preset=preset, filter_nr_raportu=filters.nr_raportu, filter_nr_niezgodnosci=filters.nr_niezgodnosci) }}" 
+                                   class="flex items-center gap-1 hover:text-primary-600">
+                                    Nr NC
+                                    {% if sort_by == 'nr_niezgodnosci' %}
+                                    <svg class="w-4 h-4 {{ 'rotate-180' if order == 'asc' else '' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                    {% endif %}
+                                </a>
+                                <input type="text" id="search_nr_niezgodnosci" placeholder="Szukaj..." 
+                                       value="{{ filters.nr_niezgodnosci }}" 
+                                       class="w-full px-2 py-0.5 text-xs font-normal normal-case rounded border border-slate-300 focus:ring-1 focus:ring-primary-500 focus:border-primary-500">
+                            </div>
+                        </th>
+                        <th class="px-2 py-2 align-top">Data NC</th>
+                        <th class="px-2 py-2 align-top">Commessa</th>
+                        <th class="px-2 py-2 align-top">Kod detalu</th>
+                        <th class="px-2 py-2 align-top">Instrukcja</th>
+                        <th class="px-2 py-2 text-center align-top">Online</th>
+                        <th class="px-2 py-2 text-right align-top">Sprawdzono</th>
+                        <th class="px-2 py-2 text-right align-top">Braków</th>
+                        <th class="px-2 py-2 text-right align-top">Braki [%]</th>
+                        <th class="px-2 py-2 text-right align-top">Czas [h]</th>
+                        <th class="px-2 py-2 text-right align-top">Wydajność [szt/h]</th>
+                        <th class="px-2 py-2 text-right align-top">Wydajność [%]</th>
+                        <th class="px-2 py-2 text-center align-top">Akcje</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
                     {% for report in reports %}
                     <tr class="table-row-hover">
-                        <td class="px-4 py-3 text-sm text-slate-700 whitespace-nowrap">
-                            {{ report.data_selekcji.strftime('%Y-%m-%d') if report.data_selekcji else '-' }}
+                        <td class="px-2 py-1 text-sm text-slate-700 whitespace-nowrap">
+                            {{ report.data_selekcji.strftime('%d.%m.%y') if report.data_selekcji else '-' }}
                         </td>
-                        <td class="px-4 py-3 text-sm text-slate-700">
-                            <span class="font-medium">{{ report.operator.imie_nazwisko if report.operator else 'Brak' }}</span>
+                        <td class="px-2 py-1 text-sm text-slate-700">
+                            <span class="font-medium">{{ report.operator.nr_operatora if report.operator else '-' }}</span>
                         </td>
-                        <td class="px-4 py-3 text-sm">
+                        <td class="px-2 py-1 text-sm">
                             <span class="px-2 py-1 bg-slate-100 text-slate-700 rounded-lg font-mono text-xs">{{ report.nr_raportu }}</span>
                         </td>
-                        <td class="px-4 py-3 text-sm text-slate-600">{{ report.nr_niezgodnosci }}</td>
-                        <td class="px-4 py-3 text-sm text-slate-600">{{ report.nr_instrukcji }}</td>
-                        <td class="px-4 py-3 text-center">
+                        <td class="px-2 py-1 text-sm text-slate-600">{{ report.nr_niezgodnosci }}</td>
+                        <td class="px-2 py-1 text-sm text-slate-600 whitespace-nowrap">{{ report.data_niezgodnosci.strftime('%d.%m.%y') if report.data_niezgodnosci else '-' }}</td>
+                        <td class="px-2 py-1 text-sm text-slate-600">{{ report.nr_zamowienia or '-' }}</td>
+                        <td class="px-2 py-1 text-sm text-slate-600">{{ report.kod_detalu or '-' }}</td>
+                        <td class="px-2 py-1 text-sm text-slate-600">{{ report.nr_instrukcji or '-' }}</td>
+                        <td class="px-2 py-1 text-center">
                             {% if report.selekcja_na_biezaco %}
                             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700">Tak</span>
                             {% else %}
                             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-600">Nie</span>
                             {% endif %}
                         </td>
-                        <td class="px-4 py-3 text-sm text-slate-700 text-right font-medium">{{ report.ilosc_detali_sprawdzonych }}</td>
-                        <td class="px-4 py-3 text-sm text-right">
+                        <td class="px-2 py-1 text-sm text-slate-700 text-right font-medium">{{ "{:,.0f}".format(report.ilosc_detali_sprawdzonych).replace(',', ' ') }}</td>
+                        <td class="px-2 py-1 text-sm text-right">
                             {% if report.total_defects > 0 %}
                             <span class="text-amber-600 font-medium">{{ report.total_defects }}</span>
                             {% else %}
                             <span class="text-slate-400">0</span>
                             {% endif %}
                         </td>
-                        <td class="px-4 py-3 text-sm text-slate-700 text-right">{{ "%.2f"|format(report.czas_pracy) }}</td>
-                        <td class="px-4 py-3 text-sm text-slate-700 text-right">{{ "%.1f"|format(report.rzeczywista_wydajnosc) }}</td>
-                        <td class="px-4 py-3 text-sm text-right">
-                            {% if report.efektywnosc >= 100 %}
-                            <span class="text-emerald-600 font-semibold">{{ "%.1f"|format(report.efektywnosc) }}%</span>
-                            {% elif report.efektywnosc >= 80 %}
-                            <span class="text-amber-600 font-medium">{{ "%.1f"|format(report.efektywnosc) }}%</span>
+                        <td class="px-2 py-1 text-sm text-right">
+                            {% if report.ilosc_detali_sprawdzonych > 0 %}
+                                {% set scrap_percentage = (report.total_defects / report.ilosc_detali_sprawdzonych) * 100 %}
+                                {% if scrap_percentage >= 5 %}
+                                <span class="text-red-600 font-semibold">{{ "%.2f"|format(scrap_percentage) }}%</span>
+                                {% elif scrap_percentage >= 2 %}
+                                <span class="text-amber-600 font-medium">{{ "%.2f"|format(scrap_percentage) }}%</span>
+                                {% elif scrap_percentage > 0 %}
+                                <span class="text-emerald-600">{{ "%.2f"|format(scrap_percentage) }}%</span>
+                                {% else %}
+                                <span class="text-slate-400">0.00%</span>
+                                {% endif %}
                             {% else %}
-                            <span class="text-red-500 font-medium">{{ "%.1f"|format(report.efektywnosc) }}%</span>
+                            <span class="text-slate-400">-</span>
                             {% endif %}
                         </td>
-                        <td class="px-4 py-3 text-center">
+                        <td class="px-2 py-1 text-sm text-slate-700 text-right">{{ "%.1f"|format(report.czas_pracy) }}</td>
+                        <td class="px-2 py-1 text-sm text-slate-700 text-right">{{ "%.0f"|format(report.rzeczywista_wydajnosc) }}</td>
+                        <td class="px-2 py-1 text-sm text-right">
+                            {% if report.efektywnosc >= 100 %}
+                            <span class="text-emerald-600 font-semibold">{{ "%.0f"|format(report.efektywnosc) }}%</span>
+                            {% elif report.efektywnosc >= 80 %}
+                            <span class="text-amber-600 font-medium">{{ "%.0f"|format(report.efektywnosc) }}%</span>
+                            {% else %}
+                            <span class="text-red-500 font-medium">{{ "%.0f"|format(report.efektywnosc) }}%</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-2 py-1 text-center">
                             <div class="flex items-center justify-center gap-1">
+                                <a href="{{ url_for('reports.view', report_id=report.id) }}" 
+                                   class="p-1 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
+                                   title="Podgląd">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                </a>
                                 <a href="{{ url_for('reports.edit', report_id=report.id) }}" 
-                                   class="p-2 text-slate-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
+                                   class="p-1 text-slate-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
                                    title="Edytuj">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                     </svg>
                                 </a>
                                 <form action="{{ url_for('reports.delete', report_id=report.id) }}" method="POST" class="inline"
-                                      onsubmit="return confirm('Czy na pewno chcesz usunąć ten raport?');">
+                                      onsubmit="return confirmDelete(this, 'Raport #{{ report.nr_raportu }}');">
                                     <button type="submit" 
-                                            class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                            class="p-1 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                                             title="Usuń">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
@@ -171,18 +298,144 @@
                     </tr>
                     {% else %}
                     <tr>
-                        <td colspan="12" class="px-4 py-12 text-center text-slate-500">
+                        <td colspan="13" class="px-4 py-12 text-center text-slate-500">
                             <svg class="w-12 h-12 mx-auto mb-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                             </svg>
                             <p class="text-lg font-medium">Brak raportów</p>
-                            <p class="text-sm">Dodaj pierwszy raport, aby zobaczyć dane tutaj.</p>
+                            <p class="text-sm">Brak raportów dla wybranego okresu.</p>
                         </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
+        
+        <!-- Pagination -->
+        {% if pagination.pages > 1 %}
+        <div class="px-4 py-2 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
+            <div class="text-sm text-slate-600">
+                Strona <strong>{{ pagination.page }}</strong> z <strong>{{ pagination.pages }}</strong>
+                ({{ pagination.total }} raportów)
+            </div>
+            <div class="flex items-center gap-2">
+                {% if pagination.has_prev %}
+                <a href="{{ url_for('main.index', page=pagination.prev_num, preset=preset, sort=sort_by, order=order) }}"
+                   class="px-2 py-1 text-sm bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors">
+                    ← Poprzednia
+                </a>
+                {% endif %}
+                
+                {% for page_num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+                    {% if page_num %}
+                        {% if page_num == pagination.page %}
+                        <span class="px-2 py-1 text-sm bg-primary-500 text-white rounded-lg font-medium">{{ page_num }}</span>
+                        {% else %}
+                        <a href="{{ url_for('main.index', page=page_num, preset=preset, sort=sort_by, order=order) }}"
+                           class="px-2 py-1 text-sm bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors">
+                            {{ page_num }}
+                        </a>
+                        {% endif %}
+                    {% else %}
+                    <span class="px-2 text-slate-400">...</span>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if pagination.has_next %}
+                <a href="{{ url_for('main.index', page=pagination.next_num, preset=preset, sort=sort_by, order=order) }}"
+                   class="px-2 py-1 text-sm bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors">
+                    Następna →
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Debounce function for live search
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    // Track which field is being edited
+    let activeSearchField = null;
+
+    // Live search handler
+    function applyFilters(fieldId) {
+        const nrRaportu = document.getElementById('search_nr_raportu').value;
+        const nrNiezgodnosci = document.getElementById('search_nr_niezgodnosci').value;
+        
+        const params = new URLSearchParams(window.location.search);
+        
+        if (nrRaportu) {
+            params.set('filter_nr_raportu', nrRaportu);
+        } else {
+            params.delete('filter_nr_raportu');
+        }
+        
+        if (nrNiezgodnosci) {
+            params.set('filter_nr_niezgodnosci', nrNiezgodnosci);
+        } else {
+            params.delete('filter_nr_niezgodnosci');
+        }
+        
+        // Reset to page 1 when filtering
+        params.set('page', '1');
+        
+        // Save which field should be focused after reload
+        if (fieldId) {
+            params.set('focus_field', fieldId);
+        }
+        
+        window.location.search = params.toString();
+    }
+
+    // Debounced search (300ms delay)
+    const debouncedSearchRaportu = debounce(() => applyFilters('search_nr_raportu'), 300);
+    const debouncedSearchNiezgodnosci = debounce(() => applyFilters('search_nr_niezgodnosci'), 300);
+
+    // Attach event listeners
+    document.getElementById('search_nr_raportu').addEventListener('keyup', function(e) {
+        if (e.key === 'Enter') {
+            applyFilters('search_nr_raportu');
+        } else {
+            debouncedSearchRaportu();
+        }
+    });
+
+    document.getElementById('search_nr_niezgodnosci').addEventListener('keyup', function(e) {
+        if (e.key === 'Enter') {
+            applyFilters('search_nr_niezgodnosci');
+        } else {
+            debouncedSearchNiezgodnosci();
+        }
+    });
+
+    // Restore focus after page load
+    document.addEventListener('DOMContentLoaded', function() {
+        const params = new URLSearchParams(window.location.search);
+        const focusField = params.get('focus_field');
+        
+        if (focusField) {
+            const field = document.getElementById(focusField);
+            if (field) {
+                field.focus();
+                // Move cursor to end of input
+                field.setSelectionRange(field.value.length, field.value.length);
+            }
+        }
+    });
+</script>
 {% endblock %}
