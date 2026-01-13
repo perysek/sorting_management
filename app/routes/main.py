@@ -66,6 +66,9 @@ def index():
         'operator': request.args.get('filter_operator', ''),
         'nr_raportu': request.args.get('filter_nr_raportu', ''),
         'nr_niezgodnosci': request.args.get('filter_nr_niezgodnosci', ''),
+        'data_nc': request.args.get('filter_data_nc', ''),
+        'commessa': request.args.get('filter_commessa', ''),
+        'kod_detalu': request.args.get('filter_kod_detalu', ''),
         'nr_instrukcji': request.args.get('filter_nr_instrukcji', ''),
     }
     
@@ -86,11 +89,18 @@ def index():
         query = query.filter(DaneRaportu.nr_raportu.ilike(f"%{filters['nr_raportu']}%"))
     if filters['nr_niezgodnosci']:
         query = query.filter(DaneRaportu.nr_niezgodnosci.ilike(f"%{filters['nr_niezgodnosci']}%"))
+    if filters['data_nc']:
+        query = query.filter(DaneRaportu.data_niezgodnosci.ilike(f"%{filters['data_nc']}%"))
+    if filters['commessa']:
+        query = query.filter(DaneRaportu.nr_zamowienia.ilike(f"%{filters['commessa']}%"))
+    if filters['kod_detalu']:
+        query = query.filter(DaneRaportu.kod_detalu.ilike(f"%{filters['kod_detalu']}%"))
     if filters['nr_instrukcji']:
         query = query.filter(DaneRaportu.nr_instrukcji.ilike(f"%{filters['nr_instrukcji']}%"))
     
     # Apply sorting
-    valid_sort_columns = ['data_selekcji', 'nr_raportu', 'nr_niezgodnosci', 'nr_instrukcji', 
+    valid_sort_columns = ['data_selekcji', 'nr_raportu', 'nr_niezgodnosci', 'data_niezgodnosci',
+                          'nr_zamowienia', 'kod_detalu', 'nr_instrukcji', 
                           'ilosc_detali_sprawdzonych', 'czas_pracy', 'zalecana_wydajnosc']
     if sort_by in valid_sort_columns:
         column = getattr(DaneRaportu, sort_by)
@@ -114,6 +124,20 @@ def index():
     if date_to:
         stats_query = stats_query.filter(DaneRaportu.data_selekcji <= date_to)
     
+    # Apply same text filters to stats
+    if filters['nr_raportu']:
+        stats_query = stats_query.filter(DaneRaportu.nr_raportu.ilike(f"%{filters['nr_raportu']}%"))
+    if filters['nr_niezgodnosci']:
+        stats_query = stats_query.filter(DaneRaportu.nr_niezgodnosci.ilike(f"%{filters['nr_niezgodnosci']}%"))
+    if filters['data_nc']:
+        stats_query = stats_query.filter(DaneRaportu.data_niezgodnosci.ilike(f"%{filters['data_nc']}%"))
+    if filters['commessa']:
+        stats_query = stats_query.filter(DaneRaportu.nr_zamowienia.ilike(f"%{filters['commessa']}%"))
+    if filters['kod_detalu']:
+        stats_query = stats_query.filter(DaneRaportu.kod_detalu.ilike(f"%{filters['kod_detalu']}%"))
+    if filters['nr_instrukcji']:
+        stats_query = stats_query.filter(DaneRaportu.nr_instrukcji.ilike(f"%{filters['nr_instrukcji']}%"))
+    
     stats_result = stats_query.first()
     
     # Get total defects with SQL (sum from braki_defekty_raportow)
@@ -121,10 +145,25 @@ def index():
         func.coalesce(func.sum(BrakiDefektyRaportu.ilosc), 0)
     ).join(DaneRaportu, BrakiDefektyRaportu.raport_id == DaneRaportu.id)
     
+    # Apply same date filters to defects
     if date_from:
         defects_query = defects_query.filter(DaneRaportu.data_selekcji >= date_from)
     if date_to:
         defects_query = defects_query.filter(DaneRaportu.data_selekcji <= date_to)
+    
+    # Apply same text filters to defects
+    if filters['nr_raportu']:
+        defects_query = defects_query.filter(DaneRaportu.nr_raportu.ilike(f"%{filters['nr_raportu']}%"))
+    if filters['nr_niezgodnosci']:
+        defects_query = defects_query.filter(DaneRaportu.nr_niezgodnosci.ilike(f"%{filters['nr_niezgodnosci']}%"))
+    if filters['data_nc']:
+        defects_query = defects_query.filter(DaneRaportu.data_niezgodnosci.ilike(f"%{filters['data_nc']}%"))
+    if filters['commessa']:
+        defects_query = defects_query.filter(DaneRaportu.nr_zamowienia.ilike(f"%{filters['commessa']}%"))
+    if filters['kod_detalu']:
+        defects_query = defects_query.filter(DaneRaportu.kod_detalu.ilike(f"%{filters['kod_detalu']}%"))
+    if filters['nr_instrukcji']:
+        defects_query = defects_query.filter(DaneRaportu.nr_instrukcji.ilike(f"%{filters['nr_instrukcji']}%"))
     
     total_defects = defects_query.scalar() or 0
     

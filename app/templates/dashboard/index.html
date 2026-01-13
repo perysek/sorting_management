@@ -160,7 +160,7 @@
                                 {% endif %}
                             </a>
                         </th>
-                        <th class="px-2 py-2 align-top">Operator</th>
+                        <th class="px-2 py-2 align-top">Dział</th>
                         <th class="px-2 py-2 align-top">
                             <div class="flex flex-col gap-1">
                                 <a href="{{ url_for('main.index', sort='nr_raportu', order='asc' if sort_by == 'nr_raportu' and order == 'desc' else 'desc', preset=preset, filter_nr_raportu=filters.nr_raportu, filter_nr_niezgodnosci=filters.nr_niezgodnosci) }}" 
@@ -193,17 +193,62 @@
                                        class="w-full px-2 py-0.5 text-xs font-normal normal-case rounded border border-slate-300 focus:ring-1 focus:ring-primary-500 focus:border-primary-500">
                             </div>
                         </th>
-                        <th class="px-2 py-2 align-top">Data NC</th>
-                        <th class="px-2 py-2 align-top">Commessa</th>
-                        <th class="px-2 py-2 align-top">Kod detalu</th>
+                        <th class="px-2 py-2 align-top">
+                            <div class="flex flex-col gap-1">
+                                <a href="{{ url_for('main.index', sort='data_niezgodnosci', order='asc' if sort_by == 'data_niezgodnosci' and order == 'desc' else 'desc', preset=preset) }}" 
+                                   class="flex items-center gap-1 hover:text-primary-600">
+                                    Data NC
+                                    {% if sort_by == 'data_niezgodnosci' %}
+                                    <svg class="w-4 h-4 {{ 'rotate-180' if order == 'asc' else '' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                    {% endif %}
+                                </a>
+                                <input type="text" id="search_data_nc" placeholder="Szukaj..." 
+                                       value="{{ filters.data_nc }}" 
+                                       class="w-full px-2 py-0.5 text-xs font-normal normal-case rounded border border-slate-300 focus:ring-1 focus:ring-primary-500 focus:border-primary-500">
+                            </div>
+                        </th>
+                        <th class="px-2 py-2 align-top">
+                            <div class="flex flex-col gap-1">
+                                <a href="{{ url_for('main.index', sort='nr_zamowienia', order='asc' if sort_by == 'nr_zamowienia' and order == 'desc' else 'desc', preset=preset) }}" 
+                                   class="flex items-center gap-1 hover:text-primary-600">
+                                    Commessa
+                                    {% if sort_by == 'nr_zamowienia' %}
+                                    <svg class="w-4 h-4 {{ 'rotate-180' if order == 'asc' else '' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                    {% endif %}
+                                </a>
+                                <input type="text" id="search_commessa" placeholder="Szukaj..." 
+                                       value="{{ filters.commessa }}" 
+                                       class="w-full px-2 py-0.5 text-xs font-normal normal-case rounded border border-slate-300 focus:ring-1 focus:ring-primary-500 focus:border-primary-500">
+                            </div>
+                        </th>
+                        <th class="px-2 py-2 align-top">
+                            <div class="flex flex-col gap-1">
+                                <a href="{{ url_for('main.index', sort='kod_detalu', order='asc' if sort_by == 'kod_detalu' and order == 'desc' else 'desc', preset=preset) }}" 
+                                   class="flex items-center gap-1 hover:text-primary-600">
+                                    Kod detalu
+                                    {% if sort_by == 'kod_detalu' %}
+                                    <svg class="w-4 h-4 {{ 'rotate-180' if order == 'asc' else '' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                    {% endif %}
+                                </a>
+                                <input type="text" id="search_kod_detalu" placeholder="Szukaj..." 
+                                       value="{{ filters.kod_detalu }}" 
+                                       class="w-full px-2 py-0.5 text-xs font-normal normal-case rounded border border-slate-300 focus:ring-1 focus:ring-primary-500 focus:border-primary-500">
+                            </div>
+                        </th>
                         <th class="px-2 py-2 align-top">Instrukcja</th>
                         <th class="px-2 py-2 text-center align-top">Online</th>
                         <th class="px-2 py-2 text-right align-top">Sprawdzono</th>
                         <th class="px-2 py-2 text-right align-top">Braków</th>
+                        <th class="px-2 py-2 align-top">Defekt</th>
                         <th class="px-2 py-2 text-right align-top">Braki [%]</th>
                         <th class="px-2 py-2 text-right align-top">Czas [h]</th>
                         <th class="px-2 py-2 text-right align-top">Wydajność [szt/h]</th>
-                        <th class="px-2 py-2 text-right align-top">Wydajność [%]</th>
                         <th class="px-2 py-2 text-center align-top">Akcje</th>
                     </tr>
                 </thead>
@@ -214,7 +259,7 @@
                             {{ report.data_selekcji.strftime('%d.%m.%y') if report.data_selekcji else '-' }}
                         </td>
                         <td class="px-2 py-1 text-sm text-slate-700">
-                            <span class="font-medium">{{ report.operator.nr_operatora if report.operator else '-' }}</span>
+                            <span class="font-medium">{{ report.operator.dzial.opis_kategorii if report.operator and report.operator.dzial else '-' }}</span>
                         </td>
                         <td class="px-2 py-1 text-sm">
                             <span class="px-2 py-1 bg-slate-100 text-slate-700 rounded-lg font-mono text-xs">{{ report.nr_raportu }}</span>
@@ -239,6 +284,13 @@
                             <span class="text-slate-400">0</span>
                             {% endif %}
                         </td>
+                        <td class="px-2 py-1 text-xs text-slate-600">
+                            {% if report.braki_defekty %}
+                            {{ report.braki_defekty|map(attribute='defekt')|join(', ') }}
+                            {% else %}
+                            -
+                            {% endif %}
+                        </td>
                         <td class="px-2 py-1 text-sm text-right">
                             {% if report.ilosc_detali_sprawdzonych > 0 %}
                                 {% set scrap_percentage = (report.total_defects / report.ilosc_detali_sprawdzonych) * 100 %}
@@ -257,15 +309,6 @@
                         </td>
                         <td class="px-2 py-1 text-sm text-slate-700 text-right">{{ "%.1f"|format(report.czas_pracy) }}</td>
                         <td class="px-2 py-1 text-sm text-slate-700 text-right">{{ "%.0f"|format(report.rzeczywista_wydajnosc) }}</td>
-                        <td class="px-2 py-1 text-sm text-right">
-                            {% if report.efektywnosc >= 100 %}
-                            <span class="text-emerald-600 font-semibold">{{ "%.0f"|format(report.efektywnosc) }}%</span>
-                            {% elif report.efektywnosc >= 80 %}
-                            <span class="text-amber-600 font-medium">{{ "%.0f"|format(report.efektywnosc) }}%</span>
-                            {% else %}
-                            <span class="text-red-500 font-medium">{{ "%.0f"|format(report.efektywnosc) }}%</span>
-                            {% endif %}
-                        </td>
                         <td class="px-2 py-1 text-center">
                             <div class="flex items-center justify-center gap-1">
                                 <a href="{{ url_for('reports.view', report_id=report.id) }}" 
@@ -376,6 +419,9 @@
     function applyFilters(fieldId) {
         const nrRaportu = document.getElementById('search_nr_raportu').value;
         const nrNiezgodnosci = document.getElementById('search_nr_niezgodnosci').value;
+        const dataNc = document.getElementById('search_data_nc').value;
+        const commessa = document.getElementById('search_commessa').value;
+        const kodDetalu = document.getElementById('search_kod_detalu').value;
         
         const params = new URLSearchParams(window.location.search);
         
@@ -389,6 +435,24 @@
             params.set('filter_nr_niezgodnosci', nrNiezgodnosci);
         } else {
             params.delete('filter_nr_niezgodnosci');
+        }
+        
+        if (dataNc) {
+            params.set('filter_data_nc', dataNc);
+        } else {
+            params.delete('filter_data_nc');
+        }
+        
+        if (commessa) {
+            params.set('filter_commessa', commessa);
+        } else {
+            params.delete('filter_commessa');
+        }
+        
+        if (kodDetalu) {
+            params.set('filter_kod_detalu', kodDetalu);
+        } else {
+            params.delete('filter_kod_detalu');
         }
         
         // Reset to page 1 when filtering
@@ -405,6 +469,9 @@
     // Debounced search (300ms delay)
     const debouncedSearchRaportu = debounce(() => applyFilters('search_nr_raportu'), 300);
     const debouncedSearchNiezgodnosci = debounce(() => applyFilters('search_nr_niezgodnosci'), 300);
+    const debouncedSearchDataNc = debounce(() => applyFilters('search_data_nc'), 300);
+    const debouncedSearchCommessa = debounce(() => applyFilters('search_commessa'), 300);
+    const debouncedSearchKodDetalu = debounce(() => applyFilters('search_kod_detalu'), 300);
 
     // Attach event listeners
     document.getElementById('search_nr_raportu').addEventListener('keyup', function(e) {
@@ -420,6 +487,30 @@
             applyFilters('search_nr_niezgodnosci');
         } else {
             debouncedSearchNiezgodnosci();
+        }
+    });
+
+    document.getElementById('search_data_nc').addEventListener('keyup', function(e) {
+        if (e.key === 'Enter') {
+            applyFilters('search_data_nc');
+        } else {
+            debouncedSearchDataNc();
+        }
+    });
+
+    document.getElementById('search_commessa').addEventListener('keyup', function(e) {
+        if (e.key === 'Enter') {
+            applyFilters('search_commessa');
+        } else {
+            debouncedSearchCommessa();
+        }
+    });
+
+    document.getElementById('search_kod_detalu').addEventListener('keyup', function(e) {
+        if (e.key === 'Enter') {
+            applyFilters('search_kod_detalu');
+        } else {
+            debouncedSearchKodDetalu();
         }
     });
 

@@ -88,6 +88,22 @@
                 </div>
             </div>
 
+            <!-- MOSYS Data Section -->
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-3 flex-shrink-0">
+                <div class="bg-white rounded-xl shadow-sm border border-cyan-200 p-4">
+                    <p class="text-xs font-medium text-cyan-600 uppercase tracking-wide mb-1">Data Niezgodności</p>
+                    <p class="text-lg font-semibold text-slate-800">{{ report.data_niezgodnosci.strftime('%d.%m.%Y') if report.data_niezgodnosci else '-' }}</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-cyan-200 p-4">
+                    <p class="text-xs font-medium text-cyan-600 uppercase tracking-wide mb-1">Numer Zamówienia</p>
+                    <p class="text-lg font-semibold text-slate-800">{{ report.nr_zamowienia or '-' }}</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-cyan-200 p-4">
+                    <p class="text-xs font-medium text-cyan-600 uppercase tracking-wide mb-1">Kod Detalu</p>
+                    <p class="text-lg font-semibold text-slate-800">{{ report.kod_detalu or '-' }}</p>
+                </div>
+            </div>
+
             <!-- Notes Card -->
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex-1 min-h-0 overflow-auto">
                 <h3 class="text-sm font-semibold text-slate-700 uppercase tracking-wide mb-3">Uwagi</h3>
@@ -116,26 +132,26 @@
                     </div>
                     <div class="flex items-center justify-between">
                         <span class="text-slate-600 text-sm">Czas pracy</span>
-                        <span class="text-xl font-bold text-slate-800">{{ "%.2f"|format(report.czas_pracy) }} h</span>
+                        <span class="text-xl font-bold text-slate-800">{{ "%.1f"|format(report.czas_pracy) }} h</span>
                     </div>
                     <div class="flex items-center justify-between">
                         <span class="text-slate-600 text-sm">Zalecana wydajność</span>
-                        <span class="text-xl font-bold text-slate-800">{{ report.zalecana_wydajnosc or '-' }} szt/h</span>
+                        <span class="text-xl font-bold text-slate-800">{{ "%.0f"|format(report.zalecana_wydajnosc) }} szt/h</span>
                     </div>
                     <div class="border-t pt-4">
                         <div class="flex items-center justify-between">
                             <span class="text-slate-600 text-sm">Rzeczywista wydajność</span>
-                            <span class="text-xl font-bold text-primary-600">{{ "%.1f"|format(report.rzeczywista_wydajnosc) }} szt/h</span>
+                            <span class="text-xl font-bold text-primary-600">{{ "%.0f"|format(report.rzeczywista_wydajnosc) }} szt/h</span>
                         </div>
                     </div>
                     <div class="flex items-center justify-between">
                         <span class="text-slate-600 text-sm">Efektywność</span>
                         {% if report.efektywnosc >= 100 %}
-                        <span class="text-2xl font-bold text-emerald-600">{{ "%.1f"|format(report.efektywnosc) }}%</span>
+                        <span class="text-2xl font-bold text-emerald-600">{{ "%.0f"|format(report.efektywnosc) }}%</span>
                         {% elif report.efektywnosc >= 80 %}
-                        <span class="text-2xl font-bold text-amber-600">{{ "%.1f"|format(report.efektywnosc) }}%</span>
+                        <span class="text-2xl font-bold text-amber-600">{{ "%.0f"|format(report.efektywnosc) }}%</span>
                         {% else %}
-                        <span class="text-2xl font-bold text-red-500">{{ "%.1f"|format(report.efektywnosc) }}%</span>
+                        <span class="text-2xl font-bold text-red-500">{{ "%.0f"|format(report.efektywnosc) }}%</span>
                         {% endif %}
                     </div>
                 </div>
@@ -149,12 +165,12 @@
                         {{ report.total_defects }} szt.
                     </span>
                 </div>
-                <div class="space-y-2 flex-1 overflow-auto">
+                <div class="space-y-1 flex-1 overflow-auto">
                     {% if report.braki_defekty %}
                         {% for defekt in report.braki_defekty %}
-                        <div class="flex items-center justify-between px-4 py-3 bg-slate-50 rounded-xl">
+                        <div class="flex items-center justify-between px-4 py-1 bg-slate-50 rounded-xl">
                             <span class="text-slate-700 font-medium">{{ defekt.defekt }}</span>
-                            <span class="px-3 py-1 bg-red-100 text-red-700 rounded-lg text-sm font-semibold">{{ defekt.ilosc }} szt.</span>
+                            <span class="px-2 py-1 bg-red-100 text-red-700 rounded-lg text-xs font-semibold">{{ defekt.ilosc }} szt.</span>
                         </div>
                         {% endfor %}
                     {% else %}
@@ -169,6 +185,35 @@
                     {% endif %}
                 </div>
             </div>
+
+            <!-- Related Reports -->
+            {% if related_reports %}
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex-shrink-0">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-sm font-semibold text-slate-700 uppercase tracking-wide">Powiązane raporty</h3>
+                    <span class="px-2 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-medium">{{ related_reports|length }}</span>
+                </div>
+                <div class="space-y-1 max-h-40 overflow-auto">
+                    {% for rel in related_reports %}
+                    <div class="flex items-center justify-between px-2 py-1 bg-slate-50 rounded-lg">
+                        <div class="flex items-center gap-1">
+                            <span class="text-sm font-medium text-slate-700">#{{ rel.nr_raportu }}</span>
+                            <span class="text-xs text-slate-500">{{ rel.data_selekcji.strftime('%d.%m.%y') if rel.data_selekcji else '-' }}</span>
+                            <span class="text-xs text-slate-400">{{ rel.operator.dzial.opis_kategorii if rel.operator and rel.operator.dzial else '' }}</span>
+                        </div>
+                        <a href="{{ url_for('reports.view', report_id=rel.id) }}" 
+                           class="p-1.5 text-slate-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
+                           title="Pokaż raport">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>
