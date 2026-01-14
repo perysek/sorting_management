@@ -84,6 +84,70 @@ def get_niezgodnosc_details(nr_niezgodnosci: str) -> dict:
 	return {'data_niezgodnosci': None, 'nr_zamowienia': None}
 
 
+def get_nc_history(nr_niezgodnosci: str) -> list:
+	"""
+	Get history of updates for a given nr_niezgodnosci.
+	Returns: list of dicts with keys: data_wpisu, godzina_wpisu, tekst_wpisu, typ_uwagi
+	"""
+	if not nr_niezgodnosci:
+		return []
+	
+	# Strip whitespace from the parameter
+	nr_niezgodnosci = str(nr_niezgodnosci).strip()
+	
+	query = '''
+		SELECT NOTCOJAN.DATA, NOTCOJAN.ORA,
+		NOTCOJAN.NOTE_01, NOTCOJAN.NOTE_02, NOTCOJAN.NOTE_03, NOTCOJAN.NOTE_04, NOTCOJAN.NOTE_05,
+		NOTCOJAN.NOTE_06, NOTCOJAN.NOTE_07, NOTCOJAN.NOTE_08, NOTCOJAN.NOTE_09, NOTCOJAN.NOTE_10,
+		NOTCOJAN.TIPO_NOTA
+		FROM STAAMPDB.NOTCOJAN NOTCOJAN
+		WHERE NOTCOJAN.NUMERO_NC = ?
+		ORDER BY NOTCOJAN.DATA ASC, NOTCOJAN.ORA ASC
+	'''
+	try:
+		df = get_pervasive(query, (nr_niezgodnosci,))
+		if df.empty:
+			return []
+		
+		history = []
+		for _, row in df.iterrows():
+			# Join all NOTE columns with space separator
+			# Try both NOTE_01 and NOTE01 formats
+			notes = []
+			for i in range(1, 11):
+				note = None
+				# Try different column name formats
+				for col_name in [f'NOTE_{i:02d}', f'NOTE{i:02d}', f'NOTE_{i}', f'NOTE{i}']:
+					if col_name in row.index:
+						note = row[col_name]
+						break
+				if note and str(note).strip():
+					notes.append(str(note).strip())
+			tekst = ' '.join(notes)
+			
+			# Parse date
+			data_wpisu = parse_mosys_date(row['DATA'])
+			
+			# Format time (ORA might be HHMM or HHMMSS format)
+			godzina = row.get('ORA', '')
+			if godzina and len(str(godzina)) >= 4:
+				godzina_str = str(godzina).zfill(6)[:4]
+				godzina_wpisu = f"{godzina_str[:2]}:{godzina_str[2:4]}"
+			else:
+				godzina_wpisu = '-'
+			
+			history.append({
+				'data_wpisu': data_wpisu,
+				'godzina_wpisu': godzina_wpisu,
+				'tekst_wpisu': tekst,
+				'typ_uwagi': row.get('TIPO_NOTA', '')
+			})
+		
+		return history
+	except Exception as e:
+		print(f"Error fetching NC history for {nr_niezgodnosci}: {e}")
+		return []
+
 def get_part_number(nr_zamowienia: str) -> str:
 	"""
 	Get kod_detalu (part number) for a given production order.

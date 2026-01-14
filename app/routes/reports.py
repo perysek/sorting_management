@@ -19,7 +19,36 @@ def view(report_id):
             DaneRaportu.id != report.id
         ).order_by(DaneRaportu.data_selekcji.desc()).all()
     
-    return render_template('reports/view.html', report=report, related_reports=related_reports)
+    # Calculate aggregate stats for this report + related reports
+    all_reports = [report] + related_reports
+    parts_checked = sum(r.ilosc_detali_sprawdzonych or 0 for r in all_reports)
+    hours_worked = sum(r.czas_pracy or 0 for r in all_reports)
+    total_defects = sum(r.total_defects or 0 for r in all_reports)
+    
+    # Calculate averages
+    avg_scrap_rate = (total_defects / parts_checked * 100) if parts_checked > 0 else 0
+    avg_productivity = (parts_checked / hours_worked) if hours_worked > 0 else 0
+    
+    stats = {
+        'parts_checked': parts_checked,
+        'total_defects': total_defects,
+        'hours_worked': hours_worked,
+        'average_scrap_rate': avg_scrap_rate,
+        'average_productivity': avg_productivity
+    }
+    
+    # Fetch NC history from MOSYS
+    nc_history = []
+    if report.nr_niezgodnosci:
+        try:
+            from MOSYS_data_functions import get_nc_history
+            nc_history = get_nc_history(report.nr_niezgodnosci)
+        except Exception as e:
+            import traceback
+            print(f"Error fetching NC history: {e}")
+            print(traceback.format_exc())
+    
+    return render_template('reports/view.html', report=report, related_reports=related_reports, stats=stats, nc_history=nc_history)
 
 
 @bp.route('/create', methods=['GET', 'POST'])

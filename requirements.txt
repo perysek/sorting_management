@@ -2,3 +2,5 @@ flask
 flask-sqlalchemy
 sqlalchemy
 python-dotenv
+pandas
+pyodbc

@@ -60,7 +60,7 @@
                 </div>
                 <div>
                     <p class="text-xl font-bold text-slate-800">{{ "%.2f"|format(stats.average_scrap_rate) }}%</p>
-                    <p class="text-xs text-slate-500">Śr. brakowość</p>
+                    <p class="text-xs text-slate-500">Średnia brakowość</p>
                 </div>
             </div>
         </div>
@@ -73,8 +73,8 @@
                     </svg>
                 </div>
                 <div>
-                    <p class="text-xl font-bold text-slate-800">{{ "%.0f"|format(stats.average_productivity) }}</p>
-                    <p class="text-xs text-slate-500">Śr. wydajność [szt/h]</p>
+                    <p class="text-xl font-bold text-slate-800">{{ "%.0f"|format(stats.average_productivity) }} szt / godz</p>
+                    <p class="text-xs text-slate-500">Średnia wydajność</p>
                 </div>
             </div>
         </div>
@@ -87,8 +87,8 @@
                     </svg>
                 </div>
                 <div>
-                    <p class="text-xl font-bold text-slate-800">{{ "%.1f"|format(stats.hours_worked) }}</p>
-                    <p class="text-xs text-slate-500">Godzin pracy</p>
+                    <p class="text-xl font-bold text-slate-800">{{ "%.1f"|format(stats.hours_worked) }} h</p>
+                    <p class="text-xs text-slate-500">Czas selekcji</p>
                 </div>
             </div>
         </div>
@@ -174,7 +174,7 @@
                                 </a>
                                 <input type="text" id="search_nr_raportu" placeholder="Szukaj..." 
                                        value="{{ filters.nr_raportu }}" 
-                                       class="w-full px-2 py-0.5 text-xs font-normal normal-case rounded border border-slate-300 focus:ring-1 focus:ring-primary-500 focus:border-primary-500">
+                                       class="w-full px-1 py-0.5 text-xs font-normal normal-case rounded border border-slate-300 focus:ring-1 focus:ring-primary-500 focus:border-primary-500">
                             </div>
                         </th>
                         <th class="px-2 py-2 align-top">
@@ -190,7 +190,7 @@
                                 </a>
                                 <input type="text" id="search_nr_niezgodnosci" placeholder="Szukaj..." 
                                        value="{{ filters.nr_niezgodnosci }}" 
-                                       class="w-full px-2 py-0.5 text-xs font-normal normal-case rounded border border-slate-300 focus:ring-1 focus:ring-primary-500 focus:border-primary-500">
+                                       class="w-full px-1 py-0.5 text-xs font-normal normal-case rounded border border-slate-300 focus:ring-1 focus:ring-primary-500 focus:border-primary-500">
                             </div>
                         </th>
                         <th class="px-2 py-2 align-top">
@@ -206,14 +206,14 @@
                                 </a>
                                 <input type="text" id="search_data_nc" placeholder="Szukaj..." 
                                        value="{{ filters.data_nc }}" 
-                                       class="w-full px-2 py-0.5 text-xs font-normal normal-case rounded border border-slate-300 focus:ring-1 focus:ring-primary-500 focus:border-primary-500">
+                                       class="w-full px-1 py-0.5 text-xs font-normal normal-case rounded border border-slate-300 focus:ring-1 focus:ring-primary-500 focus:border-primary-500">
                             </div>
                         </th>
                         <th class="px-2 py-2 align-top">
                             <div class="flex flex-col gap-1">
                                 <a href="{{ url_for('main.index', sort='nr_zamowienia', order='asc' if sort_by == 'nr_zamowienia' and order == 'desc' else 'desc', preset=preset) }}" 
                                    class="flex items-center gap-1 hover:text-primary-600">
-                                    Commessa
+                                    Zam
                                     {% if sort_by == 'nr_zamowienia' %}
                                     <svg class="w-4 h-4 {{ 'rotate-180' if order == 'asc' else '' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -222,7 +222,7 @@
                                 </a>
                                 <input type="text" id="search_commessa" placeholder="Szukaj..." 
                                        value="{{ filters.commessa }}" 
-                                       class="w-full px-2 py-0.5 text-xs font-normal normal-case rounded border border-slate-300 focus:ring-1 focus:ring-primary-500 focus:border-primary-500">
+                                       class="w-full px-1 py-0.5 text-xs font-normal normal-case rounded border border-slate-300 focus:ring-1 focus:ring-primary-500 focus:border-primary-500">
                             </div>
                         </th>
                         <th class="px-2 py-2 align-top">
@@ -238,78 +238,78 @@
                                 </a>
                                 <input type="text" id="search_kod_detalu" placeholder="Szukaj..." 
                                        value="{{ filters.kod_detalu }}" 
-                                       class="w-full px-2 py-0.5 text-xs font-normal normal-case rounded border border-slate-300 focus:ring-1 focus:ring-primary-500 focus:border-primary-500">
+                                       class="w-full px-1 py-0.5 text-xs font-normal normal-case rounded border border-slate-300 focus:ring-1 focus:ring-primary-500 focus:border-primary-500">
                             </div>
                         </th>
                         <th class="px-2 py-2 align-top">Instrukcja</th>
                         <th class="px-2 py-2 text-center align-top">Online</th>
-                        <th class="px-2 py-2 text-right align-top">Sprawdzono</th>
-                        <th class="px-2 py-2 text-right align-top">Braków</th>
-                        <th class="px-2 py-2 align-top">Defekt</th>
-                        <th class="px-2 py-2 text-right align-top">Braki [%]</th>
-                        <th class="px-2 py-2 text-right align-top">Czas [h]</th>
-                        <th class="px-2 py-2 text-right align-top">Wydajność [szt/h]</th>
+                        <th class="px-2 py-2 text-right align-top">Ilość sztuk</th>
+                        <th class="px-2 py-2 text-right align-top">NOK</th>
+                        <th class="px-2 py-2 align-top">Wady</th>
+                        <th class="px-2 py-2 text-right align-top">Braki %</th>
+                        <th class="px-2 py-2 text-right align-top">Czas [godz]</th>
+                        <th class="px-2 py-2 text-right align-top">szt / godz</th>
                         <th class="px-2 py-2 text-center align-top">Akcje</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
                     {% for report in reports %}
                     <tr class="table-row-hover">
-                        <td class="px-2 py-1 text-sm text-slate-700 whitespace-nowrap">
+                        <td class="px-2 py-0.5 text-sm text-slate-700 whitespace-nowrap">
                             {{ report.data_selekcji.strftime('%d.%m.%y') if report.data_selekcji else '-' }}
                         </td>
-                        <td class="px-2 py-1 text-sm text-slate-700">
+                        <td class="px-2 py-0.5 text-xs text-slate-700">
                             <span class="font-medium">{{ report.operator.dzial.opis_kategorii if report.operator and report.operator.dzial else '-' }}</span>
                         </td>
-                        <td class="px-2 py-1 text-sm">
-                            <span class="px-2 py-1 bg-slate-100 text-slate-700 rounded-lg font-mono text-xs">{{ report.nr_raportu }}</span>
+                        <td class="px-2 py-0.5 text-sm">
+                            <span class="px-3 py-0.5 bg-slate-100 text-slate-700 rounded-lg font-mono text-xs">{{ report.nr_raportu }}</span>
                         </td>
-                        <td class="px-2 py-1 text-sm text-slate-600">{{ report.nr_niezgodnosci }}</td>
-                        <td class="px-2 py-1 text-sm text-slate-600 whitespace-nowrap">{{ report.data_niezgodnosci.strftime('%d.%m.%y') if report.data_niezgodnosci else '-' }}</td>
-                        <td class="px-2 py-1 text-sm text-slate-600">{{ report.nr_zamowienia or '-' }}</td>
-                        <td class="px-2 py-1 text-sm text-slate-600">{{ report.kod_detalu or '-' }}</td>
-                        <td class="px-2 py-1 text-sm text-slate-600">{{ report.nr_instrukcji or '-' }}</td>
-                        <td class="px-2 py-1 text-center">
+                        <td class="px-2 py-0.5 text-sm text-slate-600">{{ report.nr_niezgodnosci }}</td>
+                        <td class="px-2 py-0.5 text-sm text-slate-600 whitespace-nowrap">{{ report.data_niezgodnosci.strftime('%d.%m.%y') if report.data_niezgodnosci else '-' }}</td>
+                        <td class="px-2 py-0.5 text-sm text-slate-600">{{ report.nr_zamowienia or '-' }}</td>
+                        <td class="px-2 py-0.5 text-sm text-slate-600">{{ report.kod_detalu or '-' }}</td>
+                        <td class="px-2 py-0.5 text-sm text-slate-600">{{ report.nr_instrukcji or '-' }}</td>
+                        <td class="px-2 py-0.5 text-center">
                             {% if report.selekcja_na_biezaco %}
-                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700">Tak</span>
+                            <span class="inline-flex items-center px-3 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700">Tak</span>
                             {% else %}
-                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-600">Nie</span>
+                            <span class="inline-flex items-center px-3 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600">Nie</span>
                             {% endif %}
                         </td>
-                        <td class="px-2 py-1 text-sm text-slate-700 text-right font-medium">{{ "{:,.0f}".format(report.ilosc_detali_sprawdzonych).replace(',', ' ') }}</td>
-                        <td class="px-2 py-1 text-sm text-right">
+                        <td class="px-2 py-0.5 text-sm text-slate-700 text-right font-medium">{{ "{:,.0f}".format(report.ilosc_detali_sprawdzonych).replace(',', ' ') }}</td>
+                        <td class="px-2 py-0.5 text-sm text-right">
                             {% if report.total_defects > 0 %}
                             <span class="text-amber-600 font-medium">{{ report.total_defects }}</span>
                             {% else %}
                             <span class="text-slate-400">0</span>
                             {% endif %}
                         </td>
-                        <td class="px-2 py-1 text-xs text-slate-600">
+                        <td class="px-2 py-0.5 text-xs text-slate-600">
                             {% if report.braki_defekty %}
                             {{ report.braki_defekty|map(attribute='defekt')|join(', ') }}
                             {% else %}
                             -
                             {% endif %}
                         </td>
-                        <td class="px-2 py-1 text-sm text-right">
+                        <td class="px-2 py-0.5 text-sm text-right">
                             {% if report.ilosc_detali_sprawdzonych > 0 %}
                                 {% set scrap_percentage = (report.total_defects / report.ilosc_detali_sprawdzonych) * 100 %}
                                 {% if scrap_percentage >= 5 %}
-                                <span class="text-red-600 font-semibold">{{ "%.2f"|format(scrap_percentage) }}%</span>
+                                <span class="text-red-600 font-semibold">{{ "%.1f"|format(scrap_percentage) }}</span>
                                 {% elif scrap_percentage >= 2 %}
-                                <span class="text-amber-600 font-medium">{{ "%.2f"|format(scrap_percentage) }}%</span>
+                                <span class="text-amber-600 font-medium">{{ "%.1f"|format(scrap_percentage) }}</span>
                                 {% elif scrap_percentage > 0 %}
-                                <span class="text-emerald-600">{{ "%.2f"|format(scrap_percentage) }}%</span>
+                                <span class="text-emerald-600">{{ "%.1f"|format(scrap_percentage) }}</span>
                                 {% else %}
-                                <span class="text-slate-400">0.00%</span>
+                                <span class="text-slate-400">0.0</span>
                                 {% endif %}
                             {% else %}
                             <span class="text-slate-400">-</span>
                             {% endif %}
                         </td>
-                        <td class="px-2 py-1 text-sm text-slate-700 text-right">{{ "%.1f"|format(report.czas_pracy) }}</td>
-                        <td class="px-2 py-1 text-sm text-slate-700 text-right">{{ "%.0f"|format(report.rzeczywista_wydajnosc) }}</td>
-                        <td class="px-2 py-1 text-center">
+                        <td class="px-2 py-0.5 text-sm text-slate-700 text-right">{{ "%.1f"|format(report.czas_pracy) }}</td>
+                        <td class="px-2 py-0.5 text-sm text-slate-700 text-right">{{ "%.0f"|format(report.rzeczywista_wydajnosc) }}</td>
+                        <td class="px-2 py-0.5 text-center">
                             <div class="flex items-center justify-center gap-1">
                                 <a href="{{ url_for('reports.view', report_id=report.id) }}" 
                                    class="p-1 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"

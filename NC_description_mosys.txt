@@ -1,0 +1,14 @@
+query = '''
+		SELECT NOTCOJAN.COMMESSA, NOTCOJAN.DATA,
+		NOTCOJAN.NOTE_01, NOTCOJAN.NOTE_02, NOTCOJAN.NOTE_03, NOTCOJAN.NOTE_04, NOTCOJAN.NOTE_05,
+		NOTCOJAN.NOTE_06, NOTCOJAN.NOTE_07, NOTCOJAN.NOTE_08, NOTCOJAN.NOTE_09, NOTCOJAN.NOTE_10,
+		NOTCOJAN.NUMERO_NC, NOTCOJAN.TIPO_NOTA
+		FROM STAAMPDB.NOTCOJAN NOTCOJAN
+		WHERE (NOTCOJAN.NUMERO_NC = ?)
+		ORDER BY NOTCOJAN.DATA, NOTCOJAN.ORA ASC
+		'''
+
+##TASK
+Update get_niezgodnosc_details(nr_niezgodnosci: str) function to use the query above to get history of 'nr_niezgodnosci' and return it as a list of dictionaries with keys 'data_wpisu' (DATA), 'godzina_wpisu' (ORA), 'tekst_wpisu' (text joined from NOTE_01, NOTE_02, NOTE_03, NOTE_04, NOTE_05, NOTE_06, NOTE_07, NOTE_08, NOTE_09, NOTE_10 with ' ' separator), 'typ_uwagi' (TIPO_NOTA) in ascending order of DATA and ORA
+
+Use updated function to display history of 'nr_niezgodnosci' in report view as table with columns 'data_wpisu', 'godzina_wpisu', 'tekst_wpisu', 'typ_uwagi'
